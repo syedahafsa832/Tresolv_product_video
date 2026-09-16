@@ -1,0 +1,14 @@
+{
+  "name": "tresolv-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.8.34 preview",
+    "check": "npx --yes hyperframes@0.8.34 check",
+    "render": "npx --yes hyperframes@0.8.34 render",
+    "publish": "npx --yes hyperframes@0.8.34 publish"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.11.1"
+  }
+}

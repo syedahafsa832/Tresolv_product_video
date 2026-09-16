@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.*
+*.local
+*.log
+.edit/
+.f5/
+.meas/
+snapshots/

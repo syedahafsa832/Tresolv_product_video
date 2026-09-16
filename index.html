@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>tResolv — product demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0a1f23; }
+      body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: #0a1f23; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #eef3f4; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+
+      /* ── The camera ────────────────────────────────────────────────
+         Real capture, full frame, native 1:1. No card, no crop, no
+         mask — the product UI is the entire picture. "Zoom" is a GSAP
+         transform-origin:0 0 scale+translate on the wrapper (must use
+         explicit left/top, not the `inset` shorthand — this renderer's
+         video-capture path silently drops the transform otherwise). */
+      .screen {
+        position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden;
+        transform-origin: 0 0; will-change: transform;
+      }
+      .screen video { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block; }
+
+      /* ── Type ──────────────────────────────────────────────────────── */
+      .card {
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; gap: 24px; text-align: center;
+        padding: 0 200px; background: #eef3f4;
+      }
+      .headline {
+        font-family: "DM Serif Display", Georgia, serif;
+        font-size: 88px; line-height: 1.15; letter-spacing: -0.015em;
+      }
+      .headline .acc { font-style: italic; color: #0b5863; }
+      .sub { font-size: 29px; color: #4d6469; letter-spacing: 0.005em; }
+      .wordmark { width: 560px; height: auto; }
+
+      /* Editorial confirmation chip (shot C) — a small, fixed caption,
+         not a fake product toast: restrained, matches the app's own
+         type and green. */
+      .confirmChip {
+        position: absolute; left: 96px; top: 90px;
+        display: flex; align-items: center; gap: 12px;
+        font-size: 23px; font-weight: 500; color: #16281f;
+        letter-spacing: 0.005em; background: #ffffff;
+        padding: 14px 24px; border-radius: 10px;
+        box-shadow: 0 14px 32px -12px rgba(10,40,30,0.28), 0 0 0 1px rgba(20,60,40,0.06);
+      }
+      .confirmDot {
+        width: 9px; height: 9px; border-radius: 50%; background: #1f9d55; display: inline-block;
+      }
+
+      /* Hook words: pre-laid-out, revealed word by word. */
+      .hookLine { position: absolute; left: 0; right: 0; text-align: center; }
+      .hookLine .w { display: inline-block; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="44.8"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- HOOK · typewriter reveal, camera drifting with the writing ────── -->
+      <section id="s1" class="clip card" data-start="0" data-duration="4.85" data-track-index="0">
+        <div id="hookRoot" style="position:relative; width:1520px; height:220px;">
+        <div id="hookWrap" style="position:relative; width:1520px; height:220px;">
+          <div id="h1" class="hookLine" style="top:0;">
+            <span class="headline"><span class="w">Most</span> <span class="w">AI</span> <span class="w">support</span> <span class="w">bots</span> <span class="w">can</span> <span class="w acc">answer,</span></span>
+          </div>
+          <div id="h2" class="hookLine" style="top:110px; opacity:0;">
+            <span class="headline"><span class="w">but</span> <span class="w">can</span> <span class="w">they</span> <span class="w acc">actually</span> <span class="w acc">do</span> <span class="w">the</span> <span class="w acc">work?</span></span>
+          </div>
+        </div>
+        </div>
+      </section>
+
+      <!-- A · THE REQUEST — her own words, real ticket, still Escalated. -->
+      <div id="wA" data-layout-allow-overflow class="screen">
+        <video id="vA" src="media/shots/c3-ticket.mp4"
+          data-start="4.8" data-duration="2.55" data-media-start="0"
+          data-track-index="1" muted playsinline></video>
+      </div>
+
+      <!-- B0 · FINDS IT IN SHOPIFY — the real Order Context panel (a
+           different, real ticket — its own order/customer, not #1012's;
+           #1012's own ticket is chat-channel and never got Shopify order
+           context auto-attached). This is the product's real "order
+           lookup" surface, not a fabrication. -->
+      <div id="wB0" data-layout-allow-overflow class="screen">
+        <video id="vB0" src="media/shots/c19-orderctx.mp4"
+          data-start="6.9" data-duration="3.0" data-media-start="1.0"
+          data-track-index="1.5" muted playsinline></video>
+      </div>
+
+      <!-- B · CHECKS / PREPARES / APPROVE — one continuous recording of
+           the real #1012 escalation card. Enters already close (picking
+           up where B0 left off, not resetting wide) and ends on the real
+           click. -->
+      <div id="wB" data-layout-allow-overflow class="screen">
+        <video id="vB" src="media/shots/c4-card.mp4"
+          data-start="9.9" data-duration="4.4" data-media-start="8.0"
+          data-track-index="2" muted playsinline></video>
+      </div>
+
+      <!-- C · THE RESULT — hard cut on the click, held with room to land:
+           "Order #1012 cancelled. Stock restocked. Customer notified by
+           Shopify." -->
+      <div id="wC" data-layout-allow-overflow class="screen">
+        <video id="vC" src="media/shots/c15-proof-full.mp4"
+          data-start="14.3" data-duration="4.7" data-media-start="0"
+          data-track-index="3" muted playsinline></video>
+      </div>
+      <!-- A restrained editorial confirmation — a sibling of #wC, not a
+           child, so it stays fixed in screen space while the camera
+           zooms. Not a fake product notification: the real green record
+           in the video above it is the proof; this just gives the beat
+           a clean, Apple-style landing. -->
+      <div id="confirm" class="confirmChip">
+        <span class="confirmDot"></span> Order #1012 cancelled
+      </div>
+
+      <!-- D · CUSTOMER OUTPUT — the real conversation, now Resolved.
+           Three real stops down the actual message (greeting → the
+           cancellation line → the sign-off), so it reads as being read,
+           not as a screenshot appearing. -->
+      <div id="wD" data-layout-allow-overflow class="screen">
+        <video id="vD" src="media/shots/c11-resolved.mp4"
+          data-start="19.0" data-duration="3.9" data-media-start="0"
+          data-track-index="4" muted playsinline></video>
+      </div>
+
+      <!-- E · BREADTH — "handles everyday support questions and other
+           store actions": the real inbox, many different real
+           conversations/subjects/tags/statuses in one table, every
+           address swapped for a realistic-looking fake one in the live
+           DOM before capture. -->
+      <div id="wE" data-layout-allow-overflow class="screen">
+        <video id="vE" src="media/shots/c13-inbox.mp4"
+          data-start="22.9" data-duration="6.0" data-media-start="0"
+          data-track-index="5" muted playsinline></video>
+      </div>
+
+      <!-- F1 · BUSINESS CONTEXT — the real Knowledge Base tab. Its own
+           "Knowledge Sources" list literally names "Privacy policy",
+           "Products (batch 1)", and "Store Information" — the exact three
+           things this VO line names, as real, already-existing entries. -->
+      <div id="wF1" data-layout-allow-overflow class="screen">
+        <video id="vF1" src="media/shots/c18-kb.mp4"
+          data-start="28.9" data-duration="3.4" data-media-start="0"
+          data-track-index="7" muted playsinline></video>
+      </div>
+
+      <!-- F2 · BUSINESS CONTEXT — the real Store page: identity, refund
+           policy, connections. -->
+      <div id="wF2" data-layout-allow-overflow class="screen">
+        <video id="vF2" src="media/shots/c14-store.mp4"
+          data-start="32.3" data-duration="3.4" data-media-start="0"
+          data-track-index="8" muted playsinline></video>
+      </div>
+
+      <!-- CLOSE -->
+      <section id="s7" class="clip card" data-start="36.6" data-duration="8.2" data-track-index="0">
+        <img id="s7mark" class="wordmark" src="media/brand/tresolv-wordmark-dark.png" alt="tResolv" />
+        <div class="sub" id="s7sub">Your Shopify store's AI support employee.</div>
+      </section>
+
+      <!-- VOICEOVER · the locked take, sliced into its own lines so real
+           silence can sit between them — every word is the same unedited
+           recording, just given room to land. Each line carries a small
+           front pad (~0.12s, where the previous line's own timing leaves
+           room) and a back pad (usually ~0.28s, capped by whatever
+           silence actually follows it) — faster-whisper's segment
+           boundaries consistently land a touch early on the end and, at
+           some sentence-initial words, a touch late on the start (e.g.
+           the front of "You approve it..."). Back-to-back lines with no
+           real pause between them (vo11→vo12, vo13→vo14) carry no pad on
+           that shared edge — there is no silence there to borrow. -->
+      <!-- This pass was recomputed from actual measured silence
+           boundaries in the source file (ffmpeg silencedetect around
+           every one of the 14 line-to-line transitions), not estimated —
+           an earlier attempt used a uniform guessed pad and still left
+           several transitions ("You approve it", "It uses your
+           products...", "tResolv, your Shopify...") clipped. Every line
+           now keeps ~0.15–0.25s of real silence before its true speech
+           onset (thinner only where the natural gap itself is that
+           short), and durations were re-validated so no two clips
+           overlap on the timeline. -->
+      <audio id="vo1"  src="media/voiceover.mp3" data-start="0.05"    data-duration="1.98"  data-media-start="0.0"    data-track-index="10"></audio>
+      <audio id="vo2"  src="media/voiceover.mp3" data-start="2.07"    data-duration="2.06"  data-media-start="2.02"   data-track-index="10"></audio>
+      <audio id="vo3"  src="media/voiceover.mp3" data-start="5.06"    data-duration="1.87"  data-media-start="4.21"   data-track-index="10"></audio>
+      <audio id="vo4"  src="media/voiceover.mp3" data-start="7.12"    data-duration="1.91"  data-media-start="6.27"   data-track-index="10"></audio>
+      <audio id="vo5"  src="media/voiceover.mp3" data-start="9.76"    data-duration="2.67"  data-media-start="8.31"   data-track-index="10"></audio>
+      <audio id="vo6"  src="media/voiceover.mp3" data-start="13.203"  data-duration="2.907" data-media-start="11.053" data-track-index="10"></audio>
+      <audio id="vo7"  src="media/voiceover.mp3" data-start="17.813"  data-duration="1.077" data-media-start="14.063" data-track-index="10"></audio>
+      <audio id="vo8"  src="media/voiceover.mp3" data-start="18.985"  data-duration="1.441" data-media-start="15.235" data-track-index="10"></audio>
+      <audio id="vo9"  src="media/voiceover.mp3" data-start="20.456"  data-duration="1.894" data-media-start="16.706" data-track-index="10"></audio>
+      <audio id="vo10" src="media/voiceover.mp3" data-start="22.84"   data-duration="2.305" data-media-start="18.59"  data-track-index="10"></audio>
+      <audio id="vo11" src="media/voiceover.mp3" data-start="25.175"  data-duration="2.615" data-media-start="20.925" data-track-index="10"></audio>
+      <audio id="vo12" src="media/voiceover.mp3" data-start="27.82"   data-duration="1.54"  data-media-start="23.56"  data-track-index="10"></audio>
+      <audio id="vo13" src="media/voiceover.mp3" data-start="30.171"  data-duration="2.949" data-media-start="25.111" data-track-index="10"></audio>
+      <audio id="vo14" src="media/voiceover.mp3" data-start="33.15"   data-duration="3.04"  data-media-start="28.08"  data-track-index="10"></audio>
+      <audio id="vo15" src="media/voiceover.mp3" data-start="37.322"  data-duration="3.568" data-media-start="31.272" data-track-index="10"></audio>
+
+      <!-- SFX · synthesized, restrained. Typewriter ticks under the hook,
+           one click on the real approval, one soft chime on the real
+           completed result. -->
+      <audio id="tick1" src="media/sfx/tick.wav" data-start="0.10"  data-duration="0.035" data-media-start="0" data-track-index="11"></audio>
+      <audio id="tick2" src="media/sfx/tick.wav" data-start="0.42"  data-duration="0.035" data-media-start="0" data-track-index="11"></audio>
+      <audio id="tick3" src="media/sfx/tick.wav" data-start="0.74"  data-duration="0.035" data-media-start="0" data-track-index="11"></audio>
+      <audio id="tick4" src="media/sfx/tick.wav" data-start="1.02"  data-duration="0.035" data-media-start="0" data-track-index="11"></audio>
+      <audio id="tick5" src="media/sfx/tick.wav" data-start="1.28"  data-duration="0.035" data-media-start="0" data-track-index="11"></audio>
+      <audio id="tick6" src="media/sfx/tick.wav" data-start="1.52"  data-duration="0.035" data-media-start="0" data-track-index="11"></audio>
+      <audio id="tick7" src="media/sfx/tick.wav" data-start="2.30"  data-duration="0.035" data-media-start="0" data-track-index="11"></audio>
+      <audio id="tick8" src="media/sfx/tick.wav" data-start="2.58"  data-duration="0.035" data-media-start="0" data-track-index="11"></audio>
+      <audio id="tick9" src="media/sfx/tick.wav" data-start="2.84"  data-duration="0.035" data-media-start="0" data-track-index="11"></audio>
+      <audio id="tick10" src="media/sfx/tick.wav" data-start="3.08" data-duration="0.035" data-media-start="0" data-track-index="11"></audio>
+      <audio id="tick11" src="media/sfx/tick.wav" data-start="3.32" data-duration="0.035" data-media-start="0" data-track-index="11"></audio>
+      <audio id="tick12" src="media/sfx/tick.wav" data-start="3.55" data-duration="0.035" data-media-start="0" data-track-index="11"></audio>
+      <audio id="sfxClick" src="media/sfx/click.wav" data-start="13.75" data-duration="0.06" data-media-start="0" data-track-index="11"></audio>
+      <audio id="sfxChime" src="media/sfx/chime.wav" data-start="14.4" data-duration="0.4" data-media-start="0" data-track-index="11"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      gsap.set(["#wA", "#wB0", "#wB", "#wC", "#wD", "#wE", "#wF1", "#wF2"], { autoAlpha: 0 });
+      gsap.set(["#wA", "#wB0", "#wB", "#wC", "#wD", "#wE", "#wF1", "#wF2"], { transformOrigin: "0px 0px" });
+
+      const seam = (sel, at, dur = 0.22) =>
+        tl.fromTo(sel, { autoAlpha: 0 }, { autoAlpha: 1, duration: dur, ease: "power1.out" }, at);
+
+      // Zoom-to-point: with transform-origin 0 0, a source pixel (px,py)
+      // lands at canvas position x=dx+scale*px, y=dy+scale*py. Solving for
+      // dx,dy centers (px,py) on the canvas at the given scale.
+      const zoom = (sel, at, dur, px, py, scale, ease = "power2.inOut") =>
+        tl.to(sel, { x: 960 - scale * px, y: 540 - scale * py, scale, duration: dur, ease }, at);
+      const setZoom = (sel, at, px, py, scale) =>
+        tl.set(sel, { x: 960 - scale * px, y: 540 - scale * py, scale }, at);
+
+      // ── HOOK · word-by-word reveal, camera drifting with the writing ──
+      const words1 = gsap.utils.toArray("#h1 .w");
+      const words2 = gsap.utils.toArray("#h2 .w");
+      tl.fromTo(words1, { y: 16 }, { opacity: 1, y: 0, duration: 0.32, stagger: 0.24, ease: "power2.out" }, 0.08);
+      tl.fromTo("#hookWrap", { x: 26 }, { x: -26, duration: 1.7, ease: "none" }, 0.05);
+      tl.set("#h2", { autoAlpha: 1 }, 2.15);
+      tl.fromTo(words2, { y: 16 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.2, ease: "power2.out" }, 2.25);
+      tl.to("#hookWrap", { x: 0, duration: 1.55, ease: "none" }, 2.25);
+      tl.to("#hookRoot", { autoAlpha: 0, duration: 0.32, ease: "power2.in" }, 4.5);
+
+      // ── A · the request ──────────────────────────────────────────────
+      // In on the message and STAY there — no zoom back out before the
+      // cut. (430,286,2.4): the frame starts inside real content, not
+      // page background past the sidebar.
+      seam("#wA", 4.8);
+      setZoom("#wA", 4.8, 0, 0, 1);
+      zoom("#wA", 5.15, 0.55, 430, 286, 2.4);
+
+      // ── B0 · finds it in Shopify — real Order Context panel ──────────
+      // The earlier version pushed 2.6x→4.36x in 0.6s — a hard, fast
+      // punch that read as a popup slamming in, and 4.36x was tight
+      // enough to feel claustrophobic. This is calmer on both counts:
+      // a wider ceiling (1.9x, not 4.36x — the panel sits in context
+      // among the real page around it, not isolated), and more than
+      // twice the time to get there, eased gently.
+      // Widening this to "calm" the entrance overcorrected — it diluted
+      // focus off the box entirely (sidebar/conversation dominated the
+      // frame). The actual ask was smooth motion, not a wide shot: keep
+      // the same gentle 1.35s ease, but land tight ON the box again.
+      seam("#wB0", 6.9, 0.3);
+      setZoom("#wB0", 6.9, 1568, 630, 1.7);
+      zoom("#wB0", 7.2, 1.35, 1568, 630, 2.75, "power2.out");
+
+      // ── B · checks → prepares → approve → click ───────────────────────
+      // Also enters already close (the policy/reasoning line) rather than
+      // a medium-wide reset — continuing straight from B0's close framing.
+      seam("#wB", 9.9);
+      setZoom("#wB", 9.9, 500, 495, 1.6);
+      // "...prepares the action." — toward the action row.
+      zoom("#wB", 11.5, 0.5, 362, 528, 1.9);
+      // "You approve it..." — tighten onto the button through the real
+      // click (media ~11.9s here → timeline ~13.8s).
+      zoom("#wB", 13.3, 0.5, 362, 528, 2.3);
+
+      // ── C · the result — hard cut on the click ───────────────────────
+      seam("#wC", 14.3);
+      // The source recording has a real "Failed" card expanded above this
+      // list (a different order), and a real "AI CODERS" test-account row
+      // a couple of cards below #1012. Frame a vertical band between the
+      // two — y in roughly [225,570] source px is clear of both — at a
+      // constant scale, so the pan from header to result text never has
+      // to cross either boundary. (Constant scale means visible_top/
+      // bottom are affine in the pan alone, so a straight-line pan
+      // between two in-bounds points never leaves the safe band either.)
+      setZoom("#wC", 14.3, 440, 388, 3.9);
+      // "...the change happens in Shopify. That's the difference." Land
+      // close, then let it sit — this is the proof; give it room.
+      zoom("#wC", 14.55, 0.65, 500, 415, 3.9);
+      // The confirmation chip: fades/lifts in just after the camera
+      // settles, sits with the result, then leaves with the cut.
+      gsap.set("#confirm", { autoAlpha: 0 });
+      tl.fromTo("#confirm", { autoAlpha: 0, y: 10 },
+        { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" }, 14.8);
+      tl.to("#confirm", { autoAlpha: 0, duration: 0.2, ease: "power2.in" }, 18.75);
+
+      // ── D · customer output — read progressively, not pasted in ──────
+      // Three real stops down the actual message: greeting/opening line,
+      // the cancellation sentence itself, the sign-off. Enters already on
+      // stop 1 (no wide flash), then follows the text down.
+      // Three stops at 0.45s each read as choppy small hops rather than
+      // a read. Two stops, each eased over nearly a full second, holds
+      // longer at both ends and moves once, deliberately, between them.
+      seam("#wD", 19.0, 0.3);
+      setZoom("#wD", 19.0, 1087, 540, 1.85);
+      zoom("#wD", 20.6, 0.9, 1087, 650, 1.85, "power2.inOut");
+
+      // ── E · breadth — real inbox, many real conversations, real fake
+      //        addresses. Wide, not a close-up, and no processing/
+      //        checklist graphic here — the VO calls for evidence of
+      //        VARIED SUPPORT WORK, and a table of many different real
+      //        tickets is that evidence directly. ─────────────────────
+      seam("#wE", 22.9);
+      tl.fromTo("#wE", { x: 0, y: 0, scale: 1.0 },
+        { x: -34, y: -70, scale: 1.16, duration: 6.0, ease: "power1.inOut" }, 22.9);
+
+      // ── F1 · business context — the real Knowledge Base list. Pans
+      //        down from "Privacy policy" to "Products (batch 1)" and
+      //        "Store Information" — the same order the VO names them,
+      //        loosely, as real distinct entries in one real screen. ───
+      // Was centered too far left — it pulled in the mostly-empty
+      // sidebar as a third of the frame while panning. Recentered on the
+      // card list itself and tightened, so the pan stays on content.
+      seam("#wF1", 28.9, 0.3);
+      setZoom("#wF1", 28.9, 900, 757, 1.85);
+      zoom("#wF1", 29.3, 2.6, 900, 955, 1.85, "power1.inOut");
+
+      // ── F2 · business context — the real Store page ───────────────────
+      seam("#wF2", 32.3);
+      tl.fromTo("#wF2", { x: 0, y: 0, scale: 1.05 },
+        { x: -30, y: -8, scale: 1.16, duration: 3.4, ease: "power1.inOut" }, 32.3);
+
+      // Close
+      tl.fromTo("#s7mark", { autoAlpha: 0, y: 22, scale: 0.94 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" }, 36.6);
+      tl.fromTo("#s7sub", { autoAlpha: 0, y: 14 },
+        { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" }, 38.4);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
